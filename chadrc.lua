@@ -56,6 +56,10 @@ function layout_colemak()
   -- Remap "j" keys to "o" keys in Colemak layout
   vim.api.nvim_set_keymap('n', 'j', 'o', { noremap = true, silent = true })
   vim.api.nvim_set_keymap('n', 'J', 'O', { noremap = true, silent = true })
+  -- Remap Search-Forward and Backward Key for Colemak
+  vim.api.nvim_set_keymap('n', 'm', 'n', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('n', 'M', 'N', { noremap = true, silent = true })
+
   _G.set_layout = "c"
   if not vim.g.vscode then
     -- Reload Nvim-Tree to refresh keybinds
@@ -75,6 +79,8 @@ function layout_qwerty()
     { mode = "n", key = "l" },
     { mode = "n", key = "j" },
     { mode = "n", key = "J" },
+    { mode = "n", key = "m" },
+    { mode = "n", key = "M" },
   }
   -- Iterate over the list of dictionaries
   for _, dictionary in ipairs(bindings) do
