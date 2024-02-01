@@ -18,5 +18,13 @@ M.dap_python = {
   }
 }
 
-return M
+M.general = {
+  n = {
+    ["<C-Left>"] = { "<C-w>h", "Window left" },
+    ["<C-Right>"] = { "<C-w>l", "Window right" },
+    ["<C-Down>"] = { "<C-w>j", "Window down" },
+    ["<C-Up>"] = { "<C-w>k", "Window up" },
+  }
+}
 
+return M

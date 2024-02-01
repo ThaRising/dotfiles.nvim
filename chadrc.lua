@@ -61,7 +61,9 @@ function layout_colemak()
   vim.api.nvim_set_keymap('n', 'M', 'N', { noremap = true, silent = true })
   -- Remap end of word keys for Colemak
   vim.api.nvim_set_keymap('n', 'q', 'e', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('n', 'gq', 'ge', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('n', 'q', 'e', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('v', 'gq', 'ge', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('v', 'gq', 'ge', { noremap = true, silent = true })
 
   _G.set_layout = "c"
   if not vim.g.vscode then
