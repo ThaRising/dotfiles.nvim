@@ -67,10 +67,14 @@ function layout_colemak()
 
   _G.set_layout = "c"
   if not vim.g.vscode then
-    -- Reload Nvim-Tree to refresh keybinds
-    local api = require "nvim-tree.api"
-    api.tree.close()
-    vim.cmd("NvimTreeToggle")
+    -- Reload Nvim-Tree only if it was open before
+    local tree = require "nvim-tree.view"
+    if tree.is_visible() then
+      -- Reload Nvim-Tree to refresh keybinds
+      local api = require "nvim-tree.api"
+      api.tree.close()
+      vim.cmd("NvimTreeToggle")
+    end
   end
 end
 
@@ -95,12 +99,17 @@ function layout_qwerty()
       vim.api.nvim_del_keymap(dictionary["mode"], dictionary["key"])
     end)
   end
-  _G.set_layout = "q"
+
+  _G.set_layout = "c"
   if not vim.g.vscode then
-    -- Reload Nvim-Tree to refresh keybinds
-    local api = require "nvim-tree.api"
-    api.tree.close()
-    vim.cmd("NvimTreeToggle")
+    -- Reload Nvim-Tree only if it was open before
+    local tree = require "nvim-tree.view"
+    if tree.is_visible() then
+      -- Reload Nvim-Tree to refresh keybinds
+      local api = require "nvim-tree.api"
+      api.tree.close()
+      vim.cmd("NvimTreeToggle")
+    end
   end
 end
 

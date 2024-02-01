@@ -26,5 +26,16 @@ M.general = {
     ["<C-Up>"] = { "<C-w>k", "Window up" },
   }
 }
+M.nvimtree = {
+  plugin = true,
+
+  n = {
+    -- toggle
+    ["<C-m>"] = { "<cmd> NvimTreeToggle <CR>", "Toggle nvimtree" },
+
+    -- focus
+    ["<leader>e"] = { "<cmd> NvimTreeFocus <CR>", "Focus nvimtree" },
+  },
+}
 
 return M
