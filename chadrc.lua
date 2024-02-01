@@ -59,6 +59,9 @@ function layout_colemak()
   -- Remap Search-Forward and Backward Key for Colemak
   vim.api.nvim_set_keymap('n', 'm', 'n', { noremap = true, silent = true })
   vim.api.nvim_set_keymap('n', 'M', 'N', { noremap = true, silent = true })
+  -- Remap end of word keys for Colemak
+  vim.api.nvim_set_keymap('n', 'q', 'e', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('n', 'gq', 'ge', { noremap = true, silent = true })
 
   _G.set_layout = "c"
   if not vim.g.vscode then
@@ -81,6 +84,8 @@ function layout_qwerty()
     { mode = "n", key = "J" },
     { mode = "n", key = "m" },
     { mode = "n", key = "M" },
+    { mode = "n", key = "q" },
+    { mode = "n", key = "gq" },
   }
   -- Iterate over the list of dictionaries
   for _, dictionary in ipairs(bindings) do

@@ -1,5 +1,8 @@
 local plugins = {
   {
+    "tpope/vim-surround", lazy = false
+  },
+  {
     "nvim-tree/nvim-tree.lua",
     cmd = { "NvimTreeToggle", "NvimTreeFocus" },
     init = function()
@@ -101,4 +104,3 @@ local plugins = {
   },
 }
 return plugins
-
