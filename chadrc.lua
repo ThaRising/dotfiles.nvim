@@ -10,9 +10,11 @@ if vim.g.vscode then
 else
   M.ui = {
     theme = 'onedark',
-    nvdash = { load_on_startup = true },
     tabufline = { lazyload = true }
   }
+  if vim.fn.has("wsl") ~= 1 then
+    M.ui.nvdash = { load_on_startup = true }
+  end
   M.plugins = "custom.chad.plugins"
   M.mappings = require "custom.chad.mappings"
 end
