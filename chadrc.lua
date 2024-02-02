@@ -6,6 +6,7 @@ if vim.g.vscode then
     theme = 'onedark'
   }
   M.plugins = "custom.vscode.plugins"
+  M.mappings = require "custom.vscode.mappings"
 else
   M.ui = {
     theme = 'onedark',
