@@ -134,4 +134,34 @@ end
 -- Map the Lua function to a custom command
 vim.cmd([[command! -nargs=1 SetLayout lua setLayout(<f-args>)]])
 
+function read_file(path)
+    local file = io.open(path, "r")
+    if not file then return nil end
+    local content = file:read("*a")
+    file:close()
+    return content
+end
+
+_G.ansible_vault_encrypt = function ()
+  local current_buf = vim.api.nvim_get_current_buf()
+  local current_file_path = vim.api.nvim_buf_get_name(current_buf)
+  local file_content = read_file(current_file_path)
+  local vault_identifier = "$ANSIBLE_VAULT;"
+  vim.cmd('write')
+  if file_content:sub(1, #vault_identifier) == vault_identifier then
+    vim.fn.system(string.format("ansible-vault decrypt --output %s %s", current_file_path, current_file_path))
+  else
+    vim.fn.system(string.format("ansible-vault encrypt --output %s %s", current_file_path, current_file_path))
+  end
+  vim.cmd('checktime')
+end
+
+_G.terminal_cwd = function ()
+  local current_buf = vim.api.nvim_get_current_buf()
+  local current_file_path = vim.api.nvim_buf_get_name(current_buf)
+  local current_file_cwd = current_file_path:match("(.-)[^/]+$")
+  require("nvterm.terminal").toggle "float"
+  require("nvterm.terminal").send(string.format("cd %s", current_file_cwd), "float")
+end
+
 return M

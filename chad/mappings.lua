@@ -24,6 +24,8 @@ M.general = {
     ["<C-Right>"] = { "<C-w>l", "Window right" },
     ["<C-Down>"] = { "<C-w>j", "Window down" },
     ["<C-Up>"] = { "<C-w>k", "Window up" },
+    ["<leader>ac"] = { ":lua ansible_vault_encrypt() <CR>", "Encrypt File with Ansible-Vault" },
+    ["<leader>at"] = { ":lua terminal_cwd() <CR>", "Open terminal in current files Working-Directory" }
   }
 }
 M.nvimtree = {
