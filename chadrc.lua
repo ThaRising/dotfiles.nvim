@@ -38,7 +38,8 @@ if vim.fn.has("wsl") == 1 then
   }
 end
 
-function layout_colemak()
+function layout_colemak(called_by_user)
+  called_by_user = called_by_user or false
   -- Remap l key to enter insert mode in normal mode
   vim.api.nvim_set_keymap('n', 'l', 'i', { noremap = true })
   -- Disable i key for entering insert mode in normal mode
@@ -64,7 +65,7 @@ function layout_colemak()
   vim.api.nvim_set_keymap('n', 'M', 'N', { noremap = true, silent = true })
   -- Remap end of word keys for Colemak
   vim.api.nvim_set_keymap('n', 'q', 'e', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('n', 'q', 'e', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('v', 'q', 'e', { noremap = true, silent = true })
   vim.api.nvim_set_keymap('v', 'gq', 'ge', { noremap = true, silent = true })
   vim.api.nvim_set_keymap('v', 'gq', 'ge', { noremap = true, silent = true })
 
@@ -72,7 +73,7 @@ function layout_colemak()
   if not vim.g.vscode then
     -- Reload Nvim-Tree only if it was open before
     local tree = require "nvim-tree.view"
-    if tree.is_visible() then
+    if tree.is_visible() and called_by_user then
       -- Reload Nvim-Tree to refresh keybinds
       local api = require "nvim-tree.api"
       api.tree.close()
@@ -81,7 +82,8 @@ function layout_colemak()
   end
 end
 
-function layout_qwerty()
+function layout_qwerty(called_by_user)
+  called_by_user = called_by_user or false
   -- Define keybindings for 'q' layout
   local bindings = {
     { mode = "n", key = "n" },
@@ -107,7 +109,7 @@ function layout_qwerty()
   if not vim.g.vscode then
     -- Reload Nvim-Tree only if it was open before
     local tree = require "nvim-tree.view"
-    if tree.is_visible() then
+    if tree.is_visible() and called_by_user then
       -- Reload Nvim-Tree to refresh keybinds
       local api = require "nvim-tree.api"
       api.tree.close()
@@ -121,9 +123,9 @@ vim.defer_fn(layout_colemak, 0)
 -- Define a Lua function to change keybindings
 _G.setLayout = function(layout)
   if layout == 'q' then
-    layout_qwerty()
+    layout_qwerty(true)
   elseif layout == 'c' then
-    layout_colemak()
+    layout_colemak(true)
   else
      print('Invalid layout. Available options are: q, c')
   end
