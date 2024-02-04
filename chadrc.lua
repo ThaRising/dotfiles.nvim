@@ -134,6 +134,14 @@ end
 -- Map the Lua function to a custom command
 vim.cmd([[command! -nargs=1 SetLayout lua setLayout(<f-args>)]])
 
+_G.surround = function (character)
+  character = character or "\\ "
+  vim.cmd(string.format('execute "normal! ciw%s%s\\eP"', character, character))
+end
+
+vim.cmd([[command! -nargs=? Wrap lua surround(<f-args>)]])
+vim.cmd([[command! -nargs=? W lua surround(<f-args>)]])
+
 function read_file(path)
     local file = io.open(path, "r")
     if not file then return nil end
@@ -149,9 +157,9 @@ _G.ansible_vault_encrypt = function ()
   local vault_identifier = "$ANSIBLE_VAULT;"
   vim.cmd('write')
   if file_content:sub(1, #vault_identifier) == vault_identifier then
-    vim.fn.system(string.format("ansible-vault decrypt --output %s %s", current_file_path, current_file_path))
+    vim.fn.system(string.format("ansible-vault decrypt --vault-password-file ~/ansiblevaultpw --output %s %s", current_file_path, current_file_path))
   else
-    vim.fn.system(string.format("ansible-vault encrypt --output %s %s", current_file_path, current_file_path))
+    vim.fn.system(string.format("ansible-vault encrypt --vault-password-file ~/ansiblevaultpw --output %s %s", current_file_path, current_file_path))
   end
   vim.cmd('checktime')
 end

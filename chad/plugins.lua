@@ -1,5 +1,14 @@
 local plugins = {
   {
+    "rmagatti/auto-session", lazy = false,
+    config = function()
+      require("custom.configs.auto-session")
+    end
+  },
+  {
+    "tpope/vim-repeat", lazy = false
+  },
+  {
     "tpope/vim-surround", lazy = false
   },
  {

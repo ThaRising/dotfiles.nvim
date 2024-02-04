@@ -12,6 +12,7 @@ local opts = {
       args = {"--stdout", "-m", "3", "--filename", "$FILENAME", "-"}
     }),
     null_ls.builtins.formatting.prettier,
+    null_ls.builtins.formatting.terraform_fmt,
     null_ls.builtins.formatting.djlint,
     null_ls.builtins.diagnostics.mypy,
     null_ls.builtins.diagnostics.ruff,
