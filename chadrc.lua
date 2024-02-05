@@ -66,6 +66,7 @@ function layout_colemak(called_by_user)
   -- Remap end of word keys for Colemak
   vim.api.nvim_set_keymap('n', 'q', 'e', { noremap = true, silent = true })
   vim.api.nvim_set_keymap('v', 'q', 'e', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('o', 'q', 'e', { noremap = true, silent = true })
   vim.api.nvim_set_keymap('v', 'gq', 'ge', { noremap = true, silent = true })
   vim.api.nvim_set_keymap('v', 'gq', 'ge', { noremap = true, silent = true })
 
@@ -170,6 +171,14 @@ _G.terminal_cwd = function ()
   local current_file_cwd = current_file_path:match("(.-)[^/]+$")
   require("nvterm.terminal").toggle "float"
   require("nvterm.terminal").send(string.format("cd %s", current_file_cwd), "float")
+  require("nvterm.terminal").toggle "float"
+  require("nvterm.terminal").toggle "float"
 end
+
+local timer = vim.loop.new_timer()
+timer:start(2000, 30000, vim.schedule_wrap(function()
+  timer:stop()
+  vim.fn.system("git fetch")
+end))
 
 return M
