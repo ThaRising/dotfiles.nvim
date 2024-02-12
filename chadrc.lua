@@ -21,10 +21,10 @@ else
           local icon = " 󰈚 "
           local path = vim.api.nvim_buf_get_name(stbufnr())
           local name = (path == "" and "Empty ") or path:match "([^/\\]+)[/\\]*$"
-      
+
           if name ~= "Empty " then
             local devicons_present, devicons = pcall(require, "nvim-web-devicons")
-      
+
             if devicons_present then
               local ft_icon = devicons.get_icon(name)
               icon = (ft_icon ~= nil and " " .. ft_icon) or icon
@@ -33,9 +33,30 @@ else
             name = vim.fn.fnamemodify(path, ':.')
             name = " " .. name .. " "
           end
-      
+
           return "%#St_file_info#" .. icon .. name .. "%#St_file_sep#" .. ""
         end)()
+
+      table.insert(
+        modules,
+        3,
+        (function()
+          local branchname = vim.fn.system("git rev-parse --abbrev-ref HEAD")
+          branchname = branchname:gsub("[^%w-_]", "")
+          if branchname ~= "HEAD" then
+            local number_of_commits = vim.fn.system("git rev-list HEAD...origin/" .. branchname .. " --count")
+            number_of_commits = number_of_commits:gsub("%D", "")
+            if number_of_commits == "0" then
+              number_of_commits = "~" .. number_of_commits
+            else
+              number_of_commits = "+" .. number_of_commits
+            end
+            return "%#St_commitnr_info#" .. " " .. number_of_commits .. "%#St_commitnr_sep#"
+          else
+            return "%#St_commitnr_info#" .. " ~" .. "%#St_commitnr_sep#"
+          end
+        end)()
+      )
       end
     }
   }
@@ -202,10 +223,10 @@ _G.terminal_cwd = function ()
   require("nvterm.terminal").toggle "float"
 end
 
-local timer = vim.loop.new_timer()
-timer:start(2000, 30000, vim.schedule_wrap(function()
-  timer:stop()
-  vim.fn.system("git fetch")
-end))
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    vim.fn.jobstart("git fetch")
+  end,
+})
 
 return M
