@@ -10,7 +10,34 @@ if vim.g.vscode then
 else
   M.ui = {
     theme = 'onedark',
-    tabufline = { lazyload = true }
+    tabufline = { lazyload = true },
+    statusline = {
+      overriden_modules = function(modules)
+        local function stbufnr()
+          return vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+        end
+
+        modules[2] = (function()
+          local icon = " 󰈚 "
+          local path = vim.api.nvim_buf_get_name(stbufnr())
+          local name = (path == "" and "Empty ") or path:match "([^/\\]+)[/\\]*$"
+      
+          if name ~= "Empty " then
+            local devicons_present, devicons = pcall(require, "nvim-web-devicons")
+      
+            if devicons_present then
+              local ft_icon = devicons.get_icon(name)
+              icon = (ft_icon ~= nil and " " .. ft_icon) or icon
+            end
+
+            name = vim.fn.fnamemodify(path, ':.')
+            name = " " .. name .. " "
+          end
+      
+          return "%#St_file_info#" .. icon .. name .. "%#St_file_sep#" .. ""
+        end)()
+      end
+    }
   }
   if vim.fn.has("wsl") ~= 1 then
     M.ui.nvdash = { load_on_startup = true }
