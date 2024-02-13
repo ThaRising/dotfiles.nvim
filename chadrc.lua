@@ -223,6 +223,16 @@ _G.terminal_cwd = function ()
   require("nvterm.terminal").toggle "float"
 end
 
+_G.close_all_buffers = function()
+  local tree = require "nvim-tree.view"
+  local tree_visible = tree.is_visible()
+  vim.cmd("%bd|e#|bd#")
+    if tree_visible then
+      vim.cmd("NvimTreeToggle")
+    vim.cmd("e#")
+    end
+end
+
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     vim.fn.jobstart("git fetch")
