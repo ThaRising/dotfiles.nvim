@@ -21,3 +21,11 @@ vim.api.nvim_create_autocmd({"BufWritePre"}, {
     vim.lsp.buf.format()
   end,
 })
+
+vim.api.nvim_exec([[
+  augroup terraformvars
+    autocmd!
+    autocmd BufRead,BufNewFile *.tfvars set filetype=terraform
+  augroup END
+]], false)
+
