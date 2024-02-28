@@ -12,6 +12,12 @@ lspconfig.pyright.setup({
   filetypes = {"python"},
 })
 
+-- Ansible
+lspconfig.ansiblels.setup({
+  filetypes = { "yaml", "yml", "ansible" },
+  root_dir = lspconfig.util.root_pattern("roles", "playbooks", "ansible", "tasks"),
+})
+
 -- Terraform
 -- Warning: This requires 'terraform-ls' to be installed on your system
 lspconfig.terraformls.setup{}

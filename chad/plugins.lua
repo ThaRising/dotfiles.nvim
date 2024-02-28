@@ -1,5 +1,13 @@
 local plugins = {
   {
+    "tpope/vim-fugitive"
+  },
+  {
+    "neoclide/coc.nvim",
+    branch = "release",
+    lazy = false
+  },
+  {
     "rmagatti/auto-session", lazy = false,
     config = function()
       require("custom.configs.auto-session")

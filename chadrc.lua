@@ -57,6 +57,13 @@ else
           end
         end)()
       )
+      table.insert(
+          modules,
+          3,
+          (function()
+            return " " .. vim.bo.filetype
+          end)()
+        )
       end
     }
   }
@@ -226,7 +233,7 @@ end
 _G.close_all_buffers = function()
   local tree = require "nvim-tree.view"
   local tree_visible = tree.is_visible()
-  vim.cmd("%bd|e#|bd#")
+  vim.cmd("%bd!|e#|bd#")
     if tree_visible then
       vim.cmd("NvimTreeToggle")
     vim.cmd("e#")
@@ -238,5 +245,32 @@ vim.api.nvim_create_autocmd("VimEnter", {
     vim.fn.jobstart("git fetch")
   end,
 })
+
+-- YAML Indentation
+vim.api.nvim_exec([[
+  augroup yaml
+    autocmd!
+      autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:>
+  augroup END
+]], false)
+
+-- COC Config
+vim.g.coc_node_path = '/home/kochbe/.nvm/versions/node/v16.18.1/bin/node'
+vim.g.coc_filetype_map = {
+  yaml = 'ansible'
+}
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = "yaml",
+  callback = function()
+    require('cmp').setup.buffer {
+      enabled = false
+        }
+  end,
+})
+require("custom.configs.coc")
+vim.api.nvim_exec('inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "<C-g>u<c-r>=v:lua.require\'nvim-autopairs\'.autopairs_cr()<CR>"', false)
+
+vim.cmd("set history=10000")
 
 return M
