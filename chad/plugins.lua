@@ -1,5 +1,9 @@
 local plugins = {
   {
+    "gioele/vim-autoswap",
+    lazy = false
+  },
+  {
     "tpope/vim-fugitive"
   },
   {

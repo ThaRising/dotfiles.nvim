@@ -74,7 +74,10 @@ else
   M.mappings = require "custom.chad.mappings"
 end
 
-vim.opt.clipboard = "unnamedplus"
+-- vim.opt.clipboard = "unnamedplus"
+vim.cmd [[ set clipboard+=unnamedplus ]]
+vim.cmd [[ set go=a ]]
+vim.cmd [[ set nocompatible ]]
 
 -- Set clipboard to use win32yank.exe on WSL
 -- Make sure to install win32yank.exe on WSL
@@ -251,6 +254,16 @@ vim.api.nvim_exec([[
   augroup yaml
     autocmd!
       autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:>
+  augroup END
+]], false)
+-- YAML Formatting
+vim.api.nvim_exec([[
+  autocmd BufRead *.yaml,*.yml setfiletype yaml
+]], false)
+vim.api.nvim_exec([[
+  augroup SpaceFix
+    autocmd!
+    autocmd BufReadPost,BufWritePre * :keepp silent %s/\s\+$//ge | :keepp silent %s/\t/  /ge
   augroup END
 ]], false)
 
