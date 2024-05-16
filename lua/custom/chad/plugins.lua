@@ -117,7 +117,8 @@ local plugins = {
   },
   {
     "williamboman/mason.nvim",
-    opts = {
+    opts = function()
+      local mason_opts = require "plugins.configs.mason"
       ensure_installed = {
         "black",
         "debugpy",
@@ -127,8 +128,12 @@ local plugins = {
         "isort",
         "djlint",
         "prettier",
-      },
-    },
+      }
+      for i = 1, #ensure_installed do
+        table.insert(mason_opts.ensure_installed, ensure_installed[i])
+      end
+      return mason_opts
+    end,
   },
   {
     "neovim/nvim-lspconfig",
