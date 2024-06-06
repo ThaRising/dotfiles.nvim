@@ -34,6 +34,9 @@ M.general = {
     ["<leader>at"] = { ":lua terminal_cwd() <CR>", "Open terminal in current files Working-Directory" },
     ["<leader>X"] = { ":lua close_all_buffers() <CR>", "Close all buffer except the current one" },
   },
+  v = {
+    ["/"] = { ":lua search_selected_text() <CR>", "Search for selection in current file"},
+  }
 }
 
 M.nvimtree = {

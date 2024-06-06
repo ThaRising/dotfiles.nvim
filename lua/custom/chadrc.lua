@@ -74,23 +74,16 @@ else
   M.mappings = require "custom.chad.mappings"
 end
 
--- vim.opt.clipboard = "unnamedplus"
-vim.cmd [[ set clipboard+=unnamedplus ]]
-vim.cmd [[ set go=a ]]
-vim.cmd [[ set nocompatible ]]
-
--- Set clipboard to use win32yank.exe on WSL
--- Make sure to install win32yank.exe on WSL
 if vim.fn.has("wsl") == 1 then
   vim.g.clipboard = {
     name = "win32yank-wsl",
     copy = {
-      ["+"] = "win32yank.exe -i --crlf",
-      ["*"] = "win32yank.exe -i --crlf",
+      ["+"] = "clip.exe",
+      ["*"] = "clip.exe",
     },
     paste = {
-      ["+"] = "win32yank.exe -o --lf",
-      ["*"] = "win32yank.exe -o --lf",
+      ["+"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+      ["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
     },
     cache_enabled = 0,
   }
@@ -268,10 +261,10 @@ vim.api.nvim_exec([[
 ]], false)
 
 -- COC Config
-vim.g.coc_node_path = '/home/kochbe/.nvm/versions/node/v16.18.1/bin/node'
-vim.g.coc_filetype_map = {
-  yaml = 'ansible'
-}
+-- vim.g.coc_node_path = '/home/kochbe/.nvm/versions/node/v16.18.1/bin/node'
+-- vim.g.coc_filetype_map = {
+--   yaml = 'ansible'
+-- }
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = "yaml",
@@ -281,9 +274,18 @@ vim.api.nvim_create_autocmd('FileType', {
         }
   end,
 })
-require("custom.configs.coc")
-vim.api.nvim_exec('inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "<C-g>u<c-r>=v:lua.require\'nvim-autopairs\'.autopairs_cr()<CR>"', false)
+-- require("custom.configs.coc")
+-- vim.api.nvim_exec('inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "<C-g>u<c-r>=v:lua.require\'nvim-autopairs\'.autopairs_cr()<CR>"', false)
 
 vim.cmd("set history=10000")
+
+-- Function search for selected
+function _G.search_selected_text()
+  local old_reg = vim.fn.getreg('"')
+  vim.cmd('normal! gvy')
+  local selected_text = vim.fn.getreg('"')
+  vim.fn.setreg('"', old_reg)
+  vim.cmd('/' .. vim.fn.escape(selected_text, '\\/'))
+end
 
 return M

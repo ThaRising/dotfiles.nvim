@@ -6,11 +6,11 @@ local plugins = {
   {
     "tpope/vim-fugitive"
   },
-  {
-    "neoclide/coc.nvim",
-    branch = "release",
-    lazy = false
-  },
+  -- {
+  --   "neoclide/coc.nvim",
+  --   branch = "release",
+  --   lazy = false
+  -- },
   {
     "rmagatti/auto-session", lazy = false,
     config = function()
@@ -110,7 +110,7 @@ local plugins = {
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
-    ft = {"python", "html", "htmldjango"},
+    ft = {"python", "html", "htmldjango", "json"},
     opts = function()
       return require "custom.configs.null-ls"
     end,
@@ -128,6 +128,7 @@ local plugins = {
         "isort",
         "djlint",
         "prettier",
+        "fixjson"
       }
       for i = 1, #ensure_installed do
         table.insert(mason_opts.ensure_installed, ensure_installed[i])
