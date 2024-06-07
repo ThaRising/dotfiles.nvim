@@ -42,9 +42,18 @@ local plugins = {
         lsp = {
           on_attach = require("vim.lsp").common_on_attach,
           capabilities = require("vim.lsp").default_capabilities,
-        },
-
+        }
       }
+    end
+  },
+  {
+    "ibhagwan/fzf-lua",
+    -- optional for icon support
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    lazy = false,
+    config = function()
+      -- calling `setup` is optional for customization
+      require("fzf-lua").setup({})
     end
   },
   {

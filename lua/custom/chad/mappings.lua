@@ -33,6 +33,7 @@ M.general = {
     ["<leader>ac"] = { ":lua ansible_vault_encrypt() <CR>", "Encrypt File with Ansible-Vault" },
     ["<leader>at"] = { ":lua terminal_cwd() <CR>", "Open terminal in current files Working-Directory" },
     ["<leader>X"] = { ":lua close_all_buffers() <CR>", "Close all buffer except the current one" },
+    ["<leader>fc"] = { ":FzfLua command_history <CR>", "Find command history" },
   },
   v = {
     ["/"] = { ":lua search_selected_text() <CR>", "Search for selection in current file"},
