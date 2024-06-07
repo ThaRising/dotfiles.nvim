@@ -4,6 +4,16 @@ local plugins = {
     "dart-lang/dart-vim-plugin"
   },
   {
+    "stevearc/dressing.nvim",
+    config = function ()
+      require("dressing").setup({
+        input = {
+          relative = "editor",
+        }
+      })
+    end
+  },
+  {
     "akinsho/flutter-tools.nvim",
     lazy = false,
     dependencies = { "nvim-lua/plenary.nvim", "stevearc/dressing.nvim" },
@@ -116,7 +126,7 @@ local plugins = {
   },
   {
     "rcarriga/nvim-dap-ui",
-    dependencies = "mfussenegger/nvim-dap",
+    dependencies = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"},
     config = function()
       local dap = require("dap")
       local dapui = require("dapui")
