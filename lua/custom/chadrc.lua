@@ -227,38 +227,51 @@ _G.terminal_cwd = function ()
 end
 
 _G.close_all_buffers = function()
-  local tree = require "nvim-tree.view"
-  local tree_visible = tree.is_visible()
-  vim.cmd("%bd!|e#|bd#")
-    if tree_visible then
-      vim.cmd("NvimTreeToggle")
-    vim.cmd("e#")
+  local buffers = vim.api.nvim_list_bufs()
+  local current_buffer = vim.api.nvim_buf_get_name(0)
+  for _, buf in ipairs(buffers) do
+    local buffer_name = vim.api.nvim_buf_get_name(buf)
+    if buffer_name == current_buffer then
+      goto continue
     end
+    if not (buffer_name:find("^term") or buffer_name:find("NvimTree")) then
+      if vim.api.nvim_buf_get_option(buf, 'modified') then
+        vim.api.nvim_echo({{"Unsaved changes, aborting operation", "White"}}, true, {})
+        return
+      end
+      vim.api.nvim_buf_delete(buf, {force = true})
+    end
+    ::continue::
+  end
 end
 
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
-    vim.fn.jobstart("git fetch")
+    vim.fn.jobstart("git fetch --all")
   end,
 })
 
--- YAML Indentation
-vim.api.nvim_exec([[
-  augroup yaml
-    autocmd!
-      autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:>
-  augroup END
-]], false)
--- YAML Formatting
-vim.api.nvim_exec([[
-  autocmd BufRead *.yaml,*.yml setfiletype yaml
-]], false)
-vim.api.nvim_exec([[
-  augroup SpaceFix
-    autocmd!
-    autocmd BufReadPost,BufWritePre * :keepp silent %s/\s\+$//ge | :keepp silent %s/\t/  /ge
-  augroup END
-]], false)
+-- General Formatting
+local augroup_spacefix = vim.api.nvim_create_augroup(
+  "SpaceFix",
+  {clear = true}
+)
+vim.api.nvim_create_autocmd(
+  {"BufReadPost", "BufWritePre"}, {
+    group = augroup_spacefix,
+    pattern = "*",
+    callback = function()
+      if vim.bo.filetype == "make" then
+        return
+      end
+      vim.cmd(":keepp silent %s/\\s\\+$//ge | :keepp silent %s/\\t/  /ge")
+    end,
+  }
+)
+-- YAML
+require("custom.configs.ft.yaml")
+-- Make
+require("custom.configs.ft.make")
 
 -- COC Config
 -- vim.g.coc_node_path = '/home/kochbe/.nvm/versions/node/v16.18.1/bin/node'
@@ -278,6 +291,16 @@ vim.api.nvim_create_autocmd('FileType', {
 -- vim.api.nvim_exec('inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "<C-g>u<c-r>=v:lua.require\'nvim-autopairs\'.autopairs_cr()<CR>"', false)
 
 vim.cmd("set history=10000")
+vim.opt.showbreak = "↪\\"
+vim.opt.listchars = {
+  tab = "→\\ ",
+  eol = "↲",
+  nbsp = "␣",
+  trail = "•",
+  extends = "⟩",
+  precedes = "⟨",
+}
+vim.opt.list = true
 
 -- Function search for selected
 function _G.search_selected_text()
