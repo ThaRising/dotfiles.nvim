@@ -9,7 +9,7 @@ M.disabled = {
 M.dap = {
   plugin = true,
   n = {
-    ["<leader>db"] = {"<cmd> DapToggleBreakpoint <CR>"}
+    ["<leader>db"] = { "<cmd> DapToggleBreakpoint <CR>" }
   }
 }
 
@@ -34,9 +34,10 @@ M.general = {
     ["<leader>at"] = { ":lua terminal_cwd() <CR>", "Open terminal in current files Working-Directory" },
     ["<leader>X"] = { ":lua close_all_buffers() <CR>", "Close all buffer except the current one" },
     ["<leader>fc"] = { ":FzfLua command_history <CR>", "Find command history" },
+    ["<leader>gc"] = { ":CopilotChat <CR>", "Toggle GitHub-Copilot chat" },
   },
   v = {
-    ["/"] = { ":lua search_selected_text() <CR>", "Search for selection in current file"},
+    ["/"] = { ":lua search_selected_text() <CR>", "Search for selection in current file" },
   }
 }
 

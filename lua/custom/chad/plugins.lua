@@ -1,11 +1,35 @@
 local plugins = {
   {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" },
+      { "nvim-lua/plenary.nvim" },
+    },
+    lazy = false,
+    config = function()
+      require("copilot").setup({})
+      require("CopilotChat").setup()
+    end
+  },
+  {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
+    },
+    lazy = false,
+    config = function()
+      require('neogit').setup({})
+    end
+  },
+  {
     lazy = false,
     "dart-lang/dart-vim-plugin"
   },
   {
     "stevearc/dressing.nvim",
-    config = function ()
+    config = function()
       require("dressing").setup({
         input = {
           relative = "editor",
@@ -24,12 +48,11 @@ local plugins = {
           enabled = false,
           run_via_dap = false,
           register_configurations = function(_)
-
-             require("dap").adapters.dart = {
-                type = "executable",
-                command = vim.fn.stdpath("data") .. "/mason/bin/dart-debug-adapter",
-                args = {"flutter"}
-              }
+            require("dap").adapters.dart = {
+              type = "executable",
+              command = vim.fn.stdpath("data") .. "/mason/bin/dart-debug-adapter",
+              args = { "flutter" }
+            }
 
             require("dap").configurations.dart = {
               {
@@ -71,15 +94,8 @@ local plugins = {
     lazy = false
   },
   {
-    "tpope/vim-fugitive"
-  },
-  -- {
-  --   "neoclide/coc.nvim",
-  --   branch = "release",
-  --   lazy = false
-  -- },
-  {
-    "rmagatti/auto-session", lazy = false,
+    "rmagatti/auto-session",
+    lazy = false,
     config = function()
       require("custom.configs.auto-session")
     end
@@ -90,7 +106,7 @@ local plugins = {
   {
     "tpope/vim-surround", lazy = false
   },
- {
+  {
     "nvim-treesitter/nvim-treesitter",
     event = { "BufReadPost", "BufNewFile" },
     tag = "v0.9.2",
@@ -101,7 +117,7 @@ local plugins = {
     end,
     config = function(_, opts)
       dofile(vim.g.base46_cache .. "syntax")
-      opts.ensure_installed = { "lua", "vimdoc", "terraform", "python" }
+      opts.ensure_installed = { "lua", "vimdoc", "terraform", "python", "htmldjango" }
       require("nvim-treesitter.configs").setup(opts)
     end,
     dependencies = {
@@ -126,7 +142,7 @@ local plugins = {
   },
   {
     "rcarriga/nvim-dap-ui",
-    dependencies = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"},
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
     config = function()
       local dap = require("dap")
       local dapui = require("dapui")
@@ -163,21 +179,21 @@ local plugins = {
         request = 'launch',
         name = 'Django',
         program = vim.fn.getcwd() .. '/manage.py',
-        args = {'runserver', '--noreload'},
+        args = { 'runserver', '--noreload' },
       })
       table.insert(require('dap').configurations.python, {
         type = 'python',
         request = 'launch',
         name = 'Django Tests',
         program = vim.fn.getcwd() .. '/manage.py',
-        args = {'test'},
+        args = { 'test' },
       })
       require("core.utils").load_mappings("dap_python")
     end,
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
-    ft = {"python", "html", "htmldjango", "json", "dart"},
+    ft = { "python", "html", "htmldjango", "json", "dart", "lua" },
     opts = function()
       return require "custom.configs.null-ls"
     end,
@@ -209,12 +225,6 @@ local plugins = {
       require "plugins.configs.lspconfig"
       require "custom.configs.lspconfig"
     end,
-  },
-  {
-    "github/copilot.vim", lazy = false
-  },
-  {
-    "pearofducks/ansible-vim"
   },
 }
 return plugins
