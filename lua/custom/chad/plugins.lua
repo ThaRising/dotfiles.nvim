@@ -20,7 +20,19 @@ local plugins = {
     },
     lazy = false,
     config = function()
-      require('neogit').setup({})
+      require('neogit').setup({
+        mappings = {
+          rebase_editor = {
+            ["[e"] = "Edit"
+          },
+          status = {
+            ["[I"] = "InitRepo"
+          },
+          popups = {
+            ["p"] = "IgnorePopup",
+          }
+        }
+      })
     end
   },
   {

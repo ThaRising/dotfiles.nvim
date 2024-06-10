@@ -37,27 +37,27 @@ else
           return "%#St_file_info#" .. icon .. name .. "%#St_file_sep#" .. ""
         end)()
 
-      table.insert(
-        modules,
-        3,
-        (function()
-          local branchname = vim.fn.system("git rev-parse --abbrev-ref HEAD")
-          branchname = branchname:gsub("[^%w-_]", "")
-          if branchname ~= "HEAD" then
-            local number_of_commits = vim.fn.system("git rev-list HEAD...origin/" .. branchname .. " --count")
-            number_of_commits = number_of_commits:gsub("%D", "")
-            if number_of_commits == "0" then
-              number_of_commits = "~" .. number_of_commits
+        table.insert(
+          modules,
+          3,
+          (function()
+            local branchname = vim.fn.system("git rev-parse --abbrev-ref HEAD")
+            branchname = branchname:gsub("[^%w-_]", "")
+            if branchname ~= "HEAD" then
+              local number_of_commits = vim.fn.system("git rev-list HEAD...origin/" .. branchname .. " --count")
+              number_of_commits = number_of_commits:gsub("%D", "")
+              if number_of_commits == "0" then
+                number_of_commits = "~" .. number_of_commits
+              else
+                number_of_commits = "+" .. number_of_commits
+              end
+              return "%#St_commitnr_info#" .. " " .. number_of_commits .. "%#St_commitnr_sep#"
             else
-              number_of_commits = "+" .. number_of_commits
+              return "%#St_commitnr_info#" .. " ~" .. "%#St_commitnr_sep#"
             end
-            return "%#St_commitnr_info#" .. " " .. number_of_commits .. "%#St_commitnr_sep#"
-          else
-            return "%#St_commitnr_info#" .. " ~" .. "%#St_commitnr_sep#"
-          end
-        end)()
-      )
-      table.insert(
+          end)()
+        )
+        table.insert(
           modules,
           3,
           (function()
@@ -179,14 +179,14 @@ _G.setLayout = function(layout)
   elseif layout == 'c' then
     layout_colemak(true)
   else
-     print('Invalid layout. Available options are: q, c')
+    print('Invalid layout. Available options are: q, c')
   end
 end
 
 -- Map the Lua function to a custom command
 vim.cmd([[command! -nargs=1 SetLayout lua setLayout(<f-args>)]])
 
-_G.surround = function (character)
+_G.surround = function(character)
   character = character or "\\ "
   vim.cmd(string.format('execute "normal! ciw%s%s\\eP"', character, character))
 end
@@ -195,28 +195,30 @@ vim.cmd([[command! -nargs=? Wrap lua surround(<f-args>)]])
 vim.cmd([[command! -nargs=? W lua surround(<f-args>)]])
 
 function read_file(path)
-    local file = io.open(path, "r")
-    if not file then return nil end
-    local content = file:read("*a")
-    file:close()
-    return content
+  local file = io.open(path, "r")
+  if not file then return nil end
+  local content = file:read("*a")
+  file:close()
+  return content
 end
 
-_G.ansible_vault_encrypt = function ()
+_G.ansible_vault_encrypt = function()
   local current_buf = vim.api.nvim_get_current_buf()
   local current_file_path = vim.api.nvim_buf_get_name(current_buf)
   local file_content = read_file(current_file_path)
   local vault_identifier = "$ANSIBLE_VAULT;"
   vim.cmd('write')
   if file_content:sub(1, #vault_identifier) == vault_identifier then
-    vim.fn.system(string.format("ansible-vault decrypt --vault-password-file ~/ansiblevaultpw --output %s %s", current_file_path, current_file_path))
+    vim.fn.system(string.format("ansible-vault decrypt --vault-password-file ~/ansiblevaultpw --output %s %s",
+      current_file_path, current_file_path))
   else
-    vim.fn.system(string.format("ansible-vault encrypt --vault-password-file ~/ansiblevaultpw --output %s %s", current_file_path, current_file_path))
+    vim.fn.system(string.format("ansible-vault encrypt --vault-password-file ~/ansiblevaultpw --output %s %s",
+      current_file_path, current_file_path))
   end
   vim.cmd('checktime')
 end
 
-_G.terminal_cwd = function ()
+_G.terminal_cwd = function()
   local current_buf = vim.api.nvim_get_current_buf()
   local current_file_path = vim.api.nvim_buf_get_name(current_buf)
   local current_file_cwd = current_file_path:match("(.-)[^/]+$")
@@ -236,10 +238,10 @@ _G.close_all_buffers = function()
     end
     if not (buffer_name:find("^term") or buffer_name:find("NvimTree")) then
       if vim.api.nvim_buf_get_option(buf, 'modified') then
-        vim.api.nvim_echo({{"Unsaved changes, aborting operation", "White"}}, true, {})
+        vim.api.nvim_echo({ { "Unsaved changes, aborting operation", "White" } }, true, {})
         return
       end
-      vim.api.nvim_buf_delete(buf, {force = true})
+      vim.api.nvim_buf_delete(buf, { force = true })
     end
     ::continue::
   end
@@ -254,10 +256,10 @@ vim.api.nvim_create_autocmd("VimEnter", {
 -- General Formatting
 local augroup_spacefix = vim.api.nvim_create_augroup(
   "SpaceFix",
-  {clear = true}
+  { clear = true }
 )
 vim.api.nvim_create_autocmd(
-  {"BufReadPost", "BufWritePre"}, {
+  { "BufReadPost", "BufWritePre" }, {
     group = augroup_spacefix,
     pattern = "*",
     callback = function()
@@ -284,13 +286,12 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     require('cmp').setup.buffer {
       enabled = false
-        }
+    }
   end,
 })
--- require("custom.configs.coc")
--- vim.api.nvim_exec('inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "<C-g>u<c-r>=v:lua.require\'nvim-autopairs\'.autopairs_cr()<CR>"', false)
 
 vim.cmd("set history=10000")
+
 vim.opt.showbreak = "↪\\"
 vim.opt.listchars = {
   tab = "→\\ ",
@@ -301,6 +302,13 @@ vim.opt.listchars = {
   precedes = "⟨",
 }
 vim.opt.list = true
+-- auto-reload files when modified externally
+-- https://unix.stackexchange.com/a/383044
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained" }, {
+  command = "if mode() != 'c' | checktime | endif",
+  pattern = { "*" },
+})
 
 -- Function search for selected
 function _G.search_selected_text()
