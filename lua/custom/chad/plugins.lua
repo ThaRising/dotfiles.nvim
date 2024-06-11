@@ -1,5 +1,21 @@
 local plugins = {
   {
+    "gelguy/wilder.nvim",
+    lazy = false,
+    config = function()
+      local wilder = require "wilder"
+      wilder.setup { modes = { ":", "/", "?" } }
+      wilder.set_option(
+        "renderer",
+        wilder.popupmenu_renderer {
+          highlighter = wilder.basic_highlighter(),
+          left = { " ", wilder.popupmenu_devicons() },
+          right = { " ", wilder.popupmenu_scrollbar() },
+        }
+      )
+    end,
+  },
+  {
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "canary",
     dependencies = {
@@ -8,9 +24,9 @@ local plugins = {
     },
     lazy = false,
     config = function()
-      require("copilot").setup({})
+      require("copilot").setup {}
       require("CopilotChat").setup()
-    end
+    end,
   },
   {
     "NeogitOrg/neogit",
@@ -20,41 +36,41 @@ local plugins = {
     },
     lazy = false,
     config = function()
-      require('neogit').setup({
+      require("neogit").setup {
         mappings = {
           rebase_editor = {
-            ["[e"] = "Edit"
+            ["[e"] = "Edit",
           },
           status = {
-            ["[I"] = "InitRepo"
+            ["[I"] = "InitRepo",
           },
           popups = {
             ["p"] = "IgnorePopup",
-          }
-        }
-      })
-    end
+          },
+        },
+      }
+    end,
   },
   {
     lazy = false,
-    "dart-lang/dart-vim-plugin"
+    "dart-lang/dart-vim-plugin",
   },
   {
     "stevearc/dressing.nvim",
     config = function()
-      require("dressing").setup({
+      require("dressing").setup {
         input = {
           relative = "editor",
-        }
-      })
-    end
+        },
+      }
+    end,
   },
   {
     "akinsho/flutter-tools.nvim",
     lazy = false,
     dependencies = { "nvim-lua/plenary.nvim", "stevearc/dressing.nvim" },
     config = function()
-      require('flutter-tools').setup {
+      require("flutter-tools").setup {
         debugger = {
           -- make these two params true to enable debug mode
           enabled = false,
@@ -62,8 +78,8 @@ local plugins = {
           register_configurations = function(_)
             require("dap").adapters.dart = {
               type = "executable",
-              command = vim.fn.stdpath("data") .. "/mason/bin/dart-debug-adapter",
-              args = { "flutter" }
+              command = vim.fn.stdpath "data" .. "/mason/bin/dart-debug-adapter",
+              args = { "flutter" },
             }
 
             require("dap").configurations.dart = {
@@ -71,11 +87,11 @@ local plugins = {
                 type = "dart",
                 request = "launch",
                 name = "Launch flutter",
-                dartSdkPath = '/usr/bin/flutter/bin/cache/dart-sdk/',
+                dartSdkPath = "/usr/bin/flutter/bin/cache/dart-sdk/",
                 flutterSdkPath = "/usr/bin/flutter",
                 program = "${workspaceFolder}/lib/main.dart",
                 cwd = "${workspaceFolder}",
-              }
+              },
             }
           end,
         },
@@ -87,9 +103,9 @@ local plugins = {
         lsp = {
           on_attach = require("vim.lsp").common_on_attach,
           capabilities = require("vim.lsp").default_capabilities,
-        }
+        },
       }
-    end
+    end,
   },
   {
     "ibhagwan/fzf-lua",
@@ -98,25 +114,27 @@ local plugins = {
     lazy = false,
     config = function()
       -- calling `setup` is optional for customization
-      require("fzf-lua").setup({})
-    end
+      require("fzf-lua").setup {}
+    end,
   },
   {
     "gioele/vim-autoswap",
-    lazy = false
+    lazy = false,
   },
   {
     "rmagatti/auto-session",
     lazy = false,
     config = function()
-      require("custom.configs.auto-session")
-    end
+      require "custom.configs.auto-session"
+    end,
   },
   {
-    "tpope/vim-repeat", lazy = false
+    "tpope/vim-repeat",
+    lazy = false,
   },
   {
-    "tpope/vim-surround", lazy = false
+    "tpope/vim-surround",
+    lazy = false,
   },
   {
     "nvim-treesitter/nvim-treesitter",
@@ -134,9 +152,9 @@ local plugins = {
     end,
     dependencies = {
       {
-        "nvim-treesitter/nvim-treesitter-textobjects"
-      }
-    }
+        "nvim-treesitter/nvim-treesitter-textobjects",
+      },
+    },
   },
   {
     "nvim-tree/nvim-tree.lua",
@@ -156,8 +174,8 @@ local plugins = {
     "rcarriga/nvim-dap-ui",
     dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
     config = function()
-      local dap = require("dap")
-      local dapui = require("dapui")
+      local dap = require "dap"
+      local dapui = require "dapui"
       dapui.setup()
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open()
@@ -168,13 +186,13 @@ local plugins = {
       dap.listeners.before.event_exited["dapui_config"] = function()
         dapui.close()
       end
-    end
+    end,
   },
   {
     "mfussenegger/nvim-dap",
     config = function(_, opts)
-      require("core.utils").load_mappings("dap")
-    end
+      require("core.utils").load_mappings "dap"
+    end,
   },
   {
     "mfussenegger/nvim-dap-python",
@@ -186,21 +204,21 @@ local plugins = {
     config = function(_, opts)
       local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
       require("dap-python").setup(path)
-      table.insert(require('dap').configurations.python, {
-        type = 'python',
-        request = 'launch',
-        name = 'Django',
-        program = vim.fn.getcwd() .. '/manage.py',
-        args = { 'runserver', '--noreload' },
+      table.insert(require("dap").configurations.python, {
+        type = "python",
+        request = "launch",
+        name = "Django",
+        program = vim.fn.getcwd() .. "/manage.py",
+        args = { "runserver", "--noreload" },
       })
-      table.insert(require('dap').configurations.python, {
-        type = 'python',
-        request = 'launch',
-        name = 'Django Tests',
-        program = vim.fn.getcwd() .. '/manage.py',
-        args = { 'test' },
+      table.insert(require("dap").configurations.python, {
+        type = "python",
+        request = "launch",
+        name = "Django Tests",
+        program = vim.fn.getcwd() .. "/manage.py",
+        args = { "test" },
       })
-      require("core.utils").load_mappings("dap_python")
+      require("core.utils").load_mappings "dap_python"
     end,
   },
   {
@@ -223,7 +241,8 @@ local plugins = {
         "isort",
         "djlint",
         "prettier",
-        "fixjson"
+        "fixjson",
+        "stylua",
       }
       for i = 1, #ensure_installed do
         table.insert(mason_opts.ensure_installed, ensure_installed[i])

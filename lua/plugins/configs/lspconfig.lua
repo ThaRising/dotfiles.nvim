@@ -24,7 +24,7 @@ M.capabilities = vim.lsp.protocol.make_client_capabilities()
 
 M.capabilities.textDocument.completion.completionItem = {
   documentationFormat = { "markdown", "plaintext" },
-  snippetSupport = true,
+  snippetSupport = false,
   preselectSupport = true,
   insertReplaceSupport = true,
   labelDetailsSupport = true,
