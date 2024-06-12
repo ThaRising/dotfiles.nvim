@@ -3,13 +3,13 @@ local M = {}
 
 if vim.g.vscode then
   M.ui = {
-    theme = 'onedark'
+    theme = "onedark",
   }
   M.plugins = "custom.vscode.plugins"
   M.mappings = require "custom.vscode.mappings"
 else
   M.ui = {
-    theme = 'onedark',
+    theme = "onedark",
     tabufline = { lazyload = true },
     statusline = {
       overriden_modules = function(modules)
@@ -30,7 +30,7 @@ else
               icon = (ft_icon ~= nil and " " .. ft_icon) or icon
             end
 
-            name = vim.fn.fnamemodify(path, ':.')
+            name = vim.fn.fnamemodify(path, ":.")
             name = " " .. name .. " "
           end
 
@@ -41,7 +41,7 @@ else
           modules,
           3,
           (function()
-            local branchname = vim.fn.system("git rev-parse --abbrev-ref HEAD")
+            local branchname = vim.fn.system "git rev-parse --abbrev-ref HEAD"
             branchname = branchname:gsub("[^%w-_]", "")
             if branchname ~= "HEAD" then
               local number_of_commits = vim.fn.system("git rev-list HEAD...origin/" .. branchname .. " --count")
@@ -64,17 +64,17 @@ else
             return " " .. vim.bo.filetype
           end)()
         )
-      end
-    }
+      end,
+    },
   }
-  if vim.fn.has("wsl") ~= 1 then
+  if vim.fn.has "wsl" ~= 1 then
     M.ui.nvdash = { load_on_startup = true }
   end
   M.plugins = "custom.chad.plugins"
   M.mappings = require "custom.chad.mappings"
 end
 
-if vim.fn.has("wsl") == 1 then
+if vim.fn.has "wsl" == 1 then
   vim.g.clipboard = {
     name = "win32yank-wsl",
     copy = {
@@ -92,34 +92,34 @@ end
 function layout_colemak(called_by_user)
   called_by_user = called_by_user or false
   -- Remap l key to enter insert mode in normal mode
-  vim.api.nvim_set_keymap('n', 'l', 'i', { noremap = true })
+  vim.api.nvim_set_keymap("n", "l", "i", { noremap = true })
   -- Disable i key for entering insert mode in normal mode
-  vim.api.nvim_set_keymap('n', 'i', '<Nop>', { noremap = true })
+  vim.api.nvim_set_keymap("n", "i", "<Nop>", { noremap = true })
   -- Define keybindings for 'c' layout
-  vim.api.nvim_set_keymap('n', 'n', 'h', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('n', 'e', 'j', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('n', 'i', 'k', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('n', 'o', 'l', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('n', 'e', 'gj', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('n', 'i', 'gk', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('x', 'e', 'j', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('x', 'i', 'k', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('v', 'n', 'h', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('v', 'e', 'j', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('v', 'i', 'k', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('v', 'o', 'l', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "n", "h", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "e", "j", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "i", "k", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "o", "l", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "e", "gj", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "i", "gk", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("x", "e", "j", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("x", "i", "k", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "n", "h", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "e", "j", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "i", "k", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "o", "l", { noremap = true, silent = true })
   -- Remap "j" keys to "o" keys in Colemak layout
-  vim.api.nvim_set_keymap('n', 'j', 'o', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('n', 'J', 'O', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "j", "o", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "J", "O", { noremap = true, silent = true })
   -- Remap Search-Forward and Backward Key for Colemak
-  vim.api.nvim_set_keymap('n', 'm', 'n', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('n', 'M', 'N', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "m", "n", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "M", "N", { noremap = true, silent = true })
   -- Remap end of word keys for Colemak
-  vim.api.nvim_set_keymap('n', 'q', 'e', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('v', 'q', 'e', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('o', 'q', 'e', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('v', 'gq', 'ge', { noremap = true, silent = true })
-  vim.api.nvim_set_keymap('v', 'gq', 'ge', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "q", "e", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "q", "e", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("o", "q", "e", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "gq", "ge", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "gq", "ge", { noremap = true, silent = true })
 
   _G.set_layout = "c"
   if not vim.g.vscode then
@@ -129,7 +129,7 @@ function layout_colemak(called_by_user)
       -- Reload Nvim-Tree to refresh keybinds
       local api = require "nvim-tree.api"
       api.tree.close()
-      vim.cmd("NvimTreeToggle")
+      vim.cmd "NvimTreeToggle"
     end
   end
 end
@@ -165,7 +165,7 @@ function layout_qwerty(called_by_user)
       -- Reload Nvim-Tree to refresh keybinds
       local api = require "nvim-tree.api"
       api.tree.close()
-      vim.cmd("NvimTreeToggle")
+      vim.cmd "NvimTreeToggle"
     end
   end
 end
@@ -174,30 +174,32 @@ vim.defer_fn(layout_colemak, 0)
 
 -- Define a Lua function to change keybindings
 _G.setLayout = function(layout)
-  if layout == 'q' then
+  if layout == "q" then
     layout_qwerty(true)
-  elseif layout == 'c' then
+  elseif layout == "c" then
     layout_colemak(true)
   else
-    print('Invalid layout. Available options are: q, c')
+    print "Invalid layout. Available options are: q, c"
   end
 end
 
 -- Map the Lua function to a custom command
-vim.cmd([[command! -nargs=1 SetLayout lua setLayout(<f-args>)]])
+vim.cmd [[command! -nargs=1 SetLayout lua setLayout(<f-args>)]]
 
 _G.surround = function(character)
   character = character or "\\ "
   vim.cmd(string.format('execute "normal! ciw%s%s\\eP"', character, character))
 end
 
-vim.cmd([[command! -nargs=? Wrap lua surround(<f-args>)]])
-vim.cmd([[command! -nargs=? W lua surround(<f-args>)]])
+vim.cmd [[command! -nargs=? Wrap lua surround(<f-args>)]]
+vim.cmd [[command! -nargs=? W lua surround(<f-args>)]]
 
 function read_file(path)
   local file = io.open(path, "r")
-  if not file then return nil end
-  local content = file:read("*a")
+  if not file then
+    return nil
+  end
+  local content = file:read "*a"
   file:close()
   return content
 end
@@ -207,21 +209,31 @@ _G.ansible_vault_encrypt = function()
   local current_file_path = vim.api.nvim_buf_get_name(current_buf)
   local file_content = read_file(current_file_path)
   local vault_identifier = "$ANSIBLE_VAULT;"
-  vim.cmd('write')
+  vim.cmd "write"
   if file_content:sub(1, #vault_identifier) == vault_identifier then
-    vim.fn.system(string.format("ansible-vault decrypt --vault-password-file ~/ansiblevaultpw --output %s %s",
-      current_file_path, current_file_path))
+    vim.fn.system(
+      string.format(
+        "ansible-vault decrypt --vault-password-file ~/ansiblevaultpw --output %s %s",
+        current_file_path,
+        current_file_path
+      )
+    )
   else
-    vim.fn.system(string.format("ansible-vault encrypt --vault-password-file ~/ansiblevaultpw --output %s %s",
-      current_file_path, current_file_path))
+    vim.fn.system(
+      string.format(
+        "ansible-vault encrypt --vault-password-file ~/ansiblevaultpw --output %s %s",
+        current_file_path,
+        current_file_path
+      )
+    )
   end
-  vim.cmd('checktime')
+  vim.cmd "checktime"
 end
 
 _G.terminal_cwd = function()
   local current_buf = vim.api.nvim_get_current_buf()
   local current_file_path = vim.api.nvim_buf_get_name(current_buf)
-  local current_file_cwd = current_file_path:match("(.-)[^/]+$")
+  local current_file_cwd = current_file_path:match "(.-)[^/]+$"
   require("nvterm.terminal").toggle "float"
   require("nvterm.terminal").send(string.format("cd %s", current_file_cwd), "float")
   require("nvterm.terminal").toggle "float"
@@ -236,8 +248,8 @@ _G.close_all_buffers = function()
     if buffer_name == current_buffer then
       goto continue
     end
-    if not (buffer_name:find("^term") or buffer_name:find("NvimTree")) then
-      if vim.api.nvim_buf_get_option(buf, 'modified') then
+    if not (buffer_name:find "^term" or buffer_name:find "NvimTree") then
+      if vim.api.nvim_buf_get_option(buf, "modified") then
         vim.api.nvim_echo({ { "Unsaved changes, aborting operation", "White" } }, true, {})
         return
       end
@@ -249,48 +261,37 @@ end
 
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
-    vim.fn.jobstart("git fetch --all")
+    vim.fn.jobstart "git fetch --all"
   end,
 })
 
 -- General Formatting
-local augroup_spacefix = vim.api.nvim_create_augroup(
-  "SpaceFix",
-  { clear = true }
-)
-vim.api.nvim_create_autocmd(
-  { "BufReadPost", "BufWritePre" }, {
-    group = augroup_spacefix,
-    pattern = "*",
-    callback = function()
-      if vim.bo.filetype == "make" then
-        return
-      end
-      vim.cmd(":keepp silent %s/\\s\\+$//ge | :keepp silent %s/\\t/  /ge")
-    end,
-  }
-)
+local augroup_spacefix = vim.api.nvim_create_augroup("SpaceFix", { clear = true })
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePre" }, {
+  group = augroup_spacefix,
+  pattern = "*",
+  callback = function()
+    if vim.bo.filetype == "make" then
+      return
+    end
+    vim.cmd ":keepp silent %s/\\s\\+$//ge | :keepp silent %s/\\t/  /ge"
+  end,
+})
 -- YAML
-require("custom.configs.ft.yaml")
+require "custom.configs.ft.yaml"
 -- Make
-require("custom.configs.ft.make")
+require "custom.configs.ft.make"
 
--- COC Config
--- vim.g.coc_node_path = '/home/kochbe/.nvm/versions/node/v16.18.1/bin/node'
--- vim.g.coc_filetype_map = {
---   yaml = 'ansible'
--- }
-
-vim.api.nvim_create_autocmd('FileType', {
+vim.api.nvim_create_autocmd("FileType", {
   pattern = "yaml",
   callback = function()
-    require('cmp').setup.buffer {
-      enabled = false
+    require("cmp").setup.buffer {
+      enabled = false,
     }
   end,
 })
 
-vim.cmd("set history=10000")
+vim.cmd "set history=10000"
 
 vim.opt.showbreak = "↪\\"
 vim.opt.listchars = {
@@ -312,11 +313,11 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained" }, {
 
 -- Function search for selected
 function _G.search_selected_text()
-  local old_reg = vim.fn.getreg('"')
-  vim.cmd('normal! gvy')
-  local selected_text = vim.fn.getreg('"')
+  local old_reg = vim.fn.getreg '"'
+  vim.cmd "normal! gvy"
+  local selected_text = vim.fn.getreg '"'
   vim.fn.setreg('"', old_reg)
-  vim.cmd('/' .. vim.fn.escape(selected_text, '\\/'))
+  vim.cmd("/" .. vim.fn.escape(selected_text, "\\/"))
 end
 
 return M
