@@ -2,15 +2,15 @@ local M = {}
 
 M.disabled = {
   t = {
-    ["<C-x>"] = ""
-  }
+    ["<C-x>"] = "",
+  },
 }
 
 M.dap = {
   plugin = true,
   n = {
-    ["<leader>db"] = { "<cmd> DapToggleBreakpoint <CR>" }
-  }
+    ["<leader>db"] = { "<cmd> DapToggleBreakpoint <CR>" },
+  },
 }
 
 M.dap_python = {
@@ -18,10 +18,10 @@ M.dap_python = {
   n = {
     ["<leader>dpr"] = {
       function()
-        require('dap').continue()
-      end
-    }
-  }
+        require("dap").continue()
+      end,
+    },
+  },
 }
 
 M.general = {
@@ -32,13 +32,14 @@ M.general = {
     ["<C-Up>"] = { "<C-w>k", "Window up" },
     ["<leader>ac"] = { ":lua ansible_vault_encrypt() <CR>", "Encrypt File with Ansible-Vault" },
     ["<leader>at"] = { ":lua terminal_cwd() <CR>", "Open terminal in current files Working-Directory" },
+    ["<leader>ap"] = { ":lua terminal_cwd_to_project_root() <CR>", "Open terminal in project root" },
     ["<leader>X"] = { ":lua close_all_buffers() <CR>", "Close all buffer except the current one" },
     ["<leader>fc"] = { ":FzfLua command_history <CR>", "Find command history" },
     ["<leader>gc"] = { ":CopilotChat <CR>", "Toggle GitHub-Copilot chat" },
   },
   v = {
     ["/"] = { ":lua search_selected_text() <CR>", "Search for selection in current file" },
-  }
+  },
 }
 
 M.nvimtree = {
@@ -52,6 +53,5 @@ M.nvimtree = {
     ["<leader>e"] = { "<cmd> NvimTreeFocus <CR>", "Focus nvimtree" },
   },
 }
-
 
 return M

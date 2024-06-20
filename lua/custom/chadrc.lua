@@ -240,6 +240,14 @@ _G.terminal_cwd = function()
   require("nvterm.terminal").toggle "float"
 end
 
+_G.terminal_cwd_to_project_root = function()
+  local project_basedir = vim.fn.getcwd()
+  require("nvterm.terminal").toggle "float"
+  require("nvterm.terminal").send(string.format("cd %s", project_basedir), "float")
+  require("nvterm.terminal").toggle "float"
+  require("nvterm.terminal").toggle "float"
+end
+
 _G.close_all_buffers = function()
   local buffers = vim.api.nvim_list_bufs()
   local current_buffer = vim.api.nvim_buf_get_name(0)
