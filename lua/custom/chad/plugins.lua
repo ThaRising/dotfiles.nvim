@@ -1,5 +1,9 @@
 local plugins = {
   {
+    "chrisgrieser/nvim-recorder",
+    opts = {},
+  },
+  {
     "gelguy/wilder.nvim",
     lazy = false,
     config = function()

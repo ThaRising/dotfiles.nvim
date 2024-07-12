@@ -115,11 +115,16 @@ function layout_colemak(called_by_user)
   vim.api.nvim_set_keymap("n", "m", "n", { noremap = true, silent = true })
   vim.api.nvim_set_keymap("n", "M", "N", { noremap = true, silent = true })
   -- Remap end of word keys for Colemak
-  vim.api.nvim_set_keymap("n", "q", "e", { noremap = true, silent = true })
-  vim.api.nvim_set_keymap("v", "q", "e", { noremap = true, silent = true })
-  vim.api.nvim_set_keymap("o", "q", "e", { noremap = true, silent = true })
-  vim.api.nvim_set_keymap("v", "gq", "ge", { noremap = true, silent = true })
-  vim.api.nvim_set_keymap("v", "gq", "ge", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "k", "e", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "k", "e", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("o", "k", "e", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "K", "E", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "K", "E", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("o", "K", "E", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "gk", "ge", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("v", "gk", "ge", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "ck", "ce", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap("n", "cK", "cE", { noremap = true, silent = true })
 
   _G.set_layout = "c"
   if not vim.g.vscode then
@@ -279,7 +284,7 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePre" }, {
   group = augroup_spacefix,
   pattern = "*",
   callback = function()
-    if vim.bo.filetype == "make" then
+    if vim.bo.filetype == "make" or vim.bo.filetype == "markdown" then
       return
     end
     vim.cmd ":keepp silent %s/\\s\\+$//ge | :keepp silent %s/\\t/  /ge"
