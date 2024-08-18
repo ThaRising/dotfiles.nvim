@@ -209,28 +209,63 @@ function read_file(path)
   return content
 end
 
+local function file_exists(path)
+  local f = io.open(path, "r")
+  if f ~= nil then
+    io.close(f)
+    return true
+  else
+    return false
+  end
+end
+
+local function relative_path(path, base)
+  local i, j = 1, 1
+  while true do
+    local i1, i2 = string.find(path, "/", i)
+    local j1, j2 = string.find(base, "/", j)
+    if i1 ~= j1 or (i1 and string.sub(path, 1, i1 - 1) ~= string.sub(base, 1, j1 - 1)) then
+      i = i1
+      j = j1
+      break
+    end
+    if not i1 then
+      break
+    end
+    i = i2 + 1
+    j = j2 + 1
+  end
+  return string.sub(string.rep("../", (j and string.len(base) - j + 1 or 0)) .. (i and string.sub(path, i) or ""), 2)
+end
+
 _G.ansible_vault_encrypt = function()
+  local project_basedir = vim.fn.getcwd()
+  local crypt_file_script_path = project_basedir .. "/" .. "crypt-file.sh"
   local current_buf = vim.api.nvim_get_current_buf()
   local current_file_path = vim.api.nvim_buf_get_name(current_buf)
-  local file_content = read_file(current_file_path)
-  local vault_identifier = "$ANSIBLE_VAULT;"
-  vim.cmd "write"
-  if file_content:sub(1, #vault_identifier) == vault_identifier then
-    vim.fn.system(
-      string.format(
-        "ansible-vault decrypt --vault-password-file ~/ansiblevaultpw --output %s %s",
-        current_file_path,
-        current_file_path
-      )
-    )
+  if file_exists(crypt_file_script_path) then
+    vim.fn.system(string.format("%s %s", crypt_file_script_path, relative_path(current_file_path, project_basedir)))
   else
-    vim.fn.system(
-      string.format(
-        "ansible-vault encrypt --vault-password-file ~/ansiblevaultpw --output %s %s",
-        current_file_path,
-        current_file_path
+    local file_content = read_file(current_file_path)
+    local vault_identifier = "$ANSIBLE_VAULT;"
+    vim.cmd "write"
+    if file_content:sub(1, #vault_identifier) == vault_identifier then
+      vim.fn.system(
+        string.format(
+          "ansible-vault decrypt --vault-password-file ~/ansiblevaultpw --output %s %s",
+          current_file_path,
+          current_file_path
+        )
       )
-    )
+    else
+      vim.fn.system(
+        string.format(
+          "ansible-vault encrypt --vault-password-file ~/ansiblevaultpw --output %s %s",
+          current_file_path,
+          current_file_path
+        )
+      )
+    end
   end
   vim.cmd "checktime"
 end
@@ -294,6 +329,8 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePre" }, {
 require "custom.configs.ft.yaml"
 -- Make
 require "custom.configs.ft.make"
+-- Markdown
+require "custom.configs.ft.markdown"
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "yaml",
