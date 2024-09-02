@@ -6,7 +6,7 @@ M.general = {
     ["<C-Right>"] = { "<C-w>l", "Window right" },
     ["<C-Down>"] = { "<C-w>j", "Window down" },
     ["<C-Up>"] = { "<C-w>k", "Window up" },
-  }
+  },
 }
 M.nvimtree = {
   plugin = true,
