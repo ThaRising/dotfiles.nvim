@@ -307,7 +307,7 @@ _G.close_all_buffers = function()
       goto continue
     end
     if not (buffer_name:find "^term" or buffer_name:find "NvimTree") then
-      if vim.api.nvim_buf_get_option(buf, "modified") then
+      if vim.api.nvim_get_option_value("modified", { buf = buf }) then
         vim.api.nvim_echo({ { "Unsaved changes, aborting operation", "White" } }, true, {})
         return
       end
@@ -329,6 +329,9 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePre" }, {
   group = augroup_spacefix,
   pattern = "*",
   callback = function()
+    if not vim.api.nvim_get_option_value("modifiable", { buf = 0 }) then
+      return
+    end
     if vim.bo.filetype == "make" or vim.bo.filetype == "markdown" then
       return
     end
@@ -341,6 +344,20 @@ require "custom.configs.ft.yaml"
 require "custom.configs.ft.make"
 -- Markdown
 require "custom.configs.ft.markdown"
+
+-- Refresh Nvimtree .gitignore files everytime a file is written
+local refresh_nvimtree = vim.loop.new_async(vim.schedule_wrap(function()
+  local api = require "nvim-tree.api"
+  api.tree.reload()
+end))
+vim.api.nvim_create_autocmd({ "BufWritePost", "BufNew" }, {
+  pattern = "*",
+  callback = function()
+    if vim.v.vim_did_enter == 1 then
+      refresh_nvimtree:send()
+    end
+  end,
+})
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "yaml",

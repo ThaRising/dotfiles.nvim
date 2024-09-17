@@ -21,6 +21,8 @@ M.on_init = function(client, initialization_result)
 end
 
 M.capabilities = vim.lsp.protocol.make_client_capabilities()
+-- Enable file watchers so Pyright automatically detects new modules
+M.capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 
 M.capabilities.textDocument.completion.completionItem = {
   documentationFormat = { "markdown", "plaintext" },
