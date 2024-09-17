@@ -249,7 +249,6 @@ _G.ansible_vault_encrypt = function()
   local current_file_path = vim.api.nvim_buf_get_name(current_buf)
   local file_content = read_file(current_file_path)
   local vault_identifier = "$ANSIBLE_VAULT;"
-  vim.api.nvim_echo({ { tostring(string_endswith(current_file_path, ".yml")), "White" } }, true, {})
   if
       file_content:sub(1, #vault_identifier) == vault_identifier
       or string_endswith(current_file_path, ".yml")
@@ -398,3 +397,4 @@ function _G.search_selected_text()
 end
 
 return M
+
