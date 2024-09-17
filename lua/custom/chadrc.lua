@@ -238,16 +238,23 @@ local function relative_path(path, base)
   return string.sub(string.rep("../", (j and string.len(base) - j + 1 or 0)) .. (i and string.sub(path, i) or ""), 2)
 end
 
+local function string_endswith(str, ending)
+  return ending == "" or str:sub(- #ending) == ending
+end
+
 _G.ansible_vault_encrypt = function()
   local project_basedir = vim.fn.getcwd()
   local crypt_file_script_path = project_basedir .. "/" .. "crypt-file.sh"
   local current_buf = vim.api.nvim_get_current_buf()
   local current_file_path = vim.api.nvim_buf_get_name(current_buf)
-  if file_exists(crypt_file_script_path) then
-    vim.fn.system(string.format("%s %s", crypt_file_script_path, relative_path(current_file_path, project_basedir)))
-  else
-    local file_content = read_file(current_file_path)
-    local vault_identifier = "$ANSIBLE_VAULT;"
+  local file_content = read_file(current_file_path)
+  local vault_identifier = "$ANSIBLE_VAULT;"
+  vim.api.nvim_echo({ { tostring(string_endswith(current_file_path, ".yml")), "White" } }, true, {})
+  if
+      file_content:sub(1, #vault_identifier) == vault_identifier
+      or string_endswith(current_file_path, ".yml")
+      or string_endswith(current_file_path, ".yaml")
+  then
     vim.cmd "write"
     if file_content:sub(1, #vault_identifier) == vault_identifier then
       vim.fn.system(
@@ -266,6 +273,9 @@ _G.ansible_vault_encrypt = function()
         )
       )
     end
+  end
+  if file_exists(crypt_file_script_path) then
+    vim.fn.system(string.format("%s %s", crypt_file_script_path, relative_path(current_file_path, project_basedir)))
   end
   vim.cmd "checktime"
 end
