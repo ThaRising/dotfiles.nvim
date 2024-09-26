@@ -6,6 +6,8 @@ local capabilities = config.capabilities
 local lspconfig = require "lspconfig"
 
 -- Python
+-- Disable Hints (purple text, with a light-bulb icon that cannot be silenced using pyright ignore comments)
+capabilities.textDocument.publishDiagnostics.tagSupport.valueSet = { 2 }
 lspconfig.pyright.setup {
   on_attach = on_attach,
   capabilities = capabilities,
