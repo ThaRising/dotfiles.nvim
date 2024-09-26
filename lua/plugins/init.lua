@@ -93,7 +93,7 @@ local default_plugins = {
       dofile(vim.g.base46_cache .. "git")
       require("gitsigns").setup(opts)
       -- Enable Gitsigns blame by default
-      vim.cmd("Gitsigns toggle_current_line_blame")
+      vim.cmd "Gitsigns toggle_current_line_blame"
     end,
   },
 
@@ -234,13 +234,16 @@ local default_plugins = {
   -- Only load whichkey after all the gui
   {
     "folke/which-key.nvim",
-    keys = { "<leader>", "<c-r>", "<c-w>", '"', "'", "`", "c", "v", "g" },
+    keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "g" },
     init = function()
       require("core.utils").load_mappings "whichkey"
     end,
     cmd = "WhichKey",
     config = function(_, opts)
       dofile(vim.g.base46_cache .. "whichkey")
+      opts.plugins = {
+        registers = false,
+      }
       require("which-key").setup(opts)
     end,
   },
