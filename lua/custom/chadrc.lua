@@ -322,6 +322,9 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
 })
 
+-- Diff Highlighting
+require("custom.configs.diff-highlighting").setup()
+
 -- General Formatting
 local augroup_spacefix = vim.api.nvim_create_augroup("SpaceFix", { clear = true })
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePre" }, {
@@ -397,4 +400,3 @@ function _G.search_selected_text()
 end
 
 return M
-
